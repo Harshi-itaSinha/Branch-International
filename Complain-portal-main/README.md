@@ -1,5 +1,5 @@
 # Complain-portal
-Comaplin portal
+Complain Portal
 
 ## Run Commands
 ```
