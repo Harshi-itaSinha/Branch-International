@@ -16,10 +16,14 @@ pip install -r requirements.txt
 cd my_project
 python manage.py runserver
 ```
+Use Different tabs while running
 
-After the server starts running append customer and admin in different tabs 
+After the server starts running append customer and admin_dashboard 
 1. BASE_URL/customer
-2. BASE_URL/admin
+2. BASE_URL/admin_dashboard
+
+
+
 insert data through Customer complain
 
 Agents can use portal at work time ONLY
