@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            padding: 20px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0 auto;
+            background-color: #fff;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        input[type="submit"] {
+            display: block;
+            width: 200px;
+            height: 40px;
+            margin: 20px auto;
+            background-color: #4CAF50;
+            color: #fff;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .feedback-input {
+            height: 60px;
+        }
+    </style>
+    <script>
+        function reloadPage() {
+            location.reload();
+        }
+    </script>
+    <script>
+        var socket = new WebSocket("ws://" + window.location.host + "/ws/admin_dashboard/");
+    
+        socket.onmessage = function (event) {
+            var data = JSON.parse(event.data);
+            // Handle the incoming message, e.g., update the UI
+            alert(data.message);
+        };
+    
+        socket.onclose = function (event) {
+            // Handle the WebSocket connection closed event
+            console.error('WebSocket closed unexpectedly');
+        };
+    </script>
+        
+</head>
+<body>
+    <h1>Admin Dashboard</h1>
+    <form method="post" action="#" onsubmit="reloadPage()">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <th>Serial No.</th>
+                <th>Name</th>
+                <th>Phone Number</th>
+                <th>Email</th>
+                <th>Order Date</th>
+                <th>Complain Date (UTC)</th>
+                <th>Product Category</th>
+                <th>Product Name</th>
+                <th>Question</th>
+                <th>Feedback</th>
+            </tr>
+            {% for complaint in complaints %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ complaint.name }}</td>
+                    <td>{{ complaint.phone_number }}</td>
+                    <td>{{ complaint.email }}</td>
+                    <td>{{ complaint.order_date }}</td>
+                    <td>{{ complaint.complain_date }}</td>
+                    <td>{{ complaint.product_category }}</td>
+                    <td>{{ complaint.product_name }}</td>
+                    <td>{{ complaint.question }}</td>
+                    <td>
+                        <textarea class="feedback-input" name="{{ complaint.phone_number }}">{{ complaint.feedback }}</textarea>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <br>
+        <input type="submit" value="Submit Feedback">
+    </form>
+</body>
+</html>
